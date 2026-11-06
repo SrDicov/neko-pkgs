@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Disparar repo-neko
         env:
-          GH_TOKEN: ${{ secrets.PR_TOKEN }}
+          GH_TOKEN: ${{ secrets.PR_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           set -e
           for repo in SrDicov/repo-neko Neko-Void-Linux/repo-neko; do

@@ -68,7 +68,7 @@ jobs:
       DISTFILES: ${{ matrix.distfiles }}
       TAG: ${{ matrix.tag }}
       REPO: ${{ github.repository }}
-      TOKEN: ${{ secrets.PR_TOKEN }}
+      TOKEN: ${{ secrets.PR_TOKEN || secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -226,7 +226,7 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.PR_TOKEN }}
+      GH_TOKEN: ${{ secrets.PR_TOKEN || secrets.GITHUB_TOKEN }}
     steps:
       - name: Merge
         shell: bash
