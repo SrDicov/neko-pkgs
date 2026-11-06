@@ -467,7 +467,7 @@
     "build_style": "fetch",
     "checkdepends": [],
     "checksum": [
-      "sha256:f3af8afec5d25c228eb6f4dbd9cfde0fea7ca5e4b42aff0145a1ded273d01b2d"
+      "sha256:32fed80ad3f8caf666e5860022361e9709d64aa318cfb19f548e8b458d4f6793"
     ],
     "depends": [
       "gtk+3",
@@ -526,9 +526,9 @@
       "chatgpt>=0"
     ],
     "restricted": false,
-    "revision": 2,
+    "revision": 1,
     "subpackages": [],
-    "version": "26.1029.61003"
+    "version": "26.1103.31037"
   },
   {
     "archs": [
@@ -3970,7 +3970,7 @@
     "build_style": null,
     "checkdepends": [],
     "checksum": [
-      "sha256:d44510383961b089f7b7ce848ebcd38a740f8591bb8b60f8153a210e45d8848c"
+      "sha256:f8407593a78a9d3a4fe47dbdae59abb21e62369438fbe6792bda4be5afaa83ec"
     ],
     "depends": [
       "libXtst",
@@ -3985,7 +3985,7 @@
       "desktop-file-utils"
     ],
     "distfiles": [
-      "https://vscode.download.prss.microsoft.com/dbazure/download/stable/${_commit}/code-stable-x64-${_timestamp}.tar.gz"
+      "https://vscode.download.prss.microsoft.com/dbazure/download/stable/6bab64e2d12b04d04c0d99c27ff166023efd1dda/code-stable-x64-1793902986.tar.gz"
     ],
     "format_version": 1,
     "hostmakedepends": [
@@ -3999,7 +3999,7 @@
     "restricted": false,
     "revision": 1,
     "subpackages": [],
-    "version": "1.145.0"
+    "version": "1.145.1"
   },
   {
     "archs": [
