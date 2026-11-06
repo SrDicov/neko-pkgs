@@ -2,8 +2,6 @@
 #
 # build.sh
 
-set -e
-
 if [ ! -s /tmp/templates ]; then
 	echo "No templates changed to build."
 	exit 0
@@ -22,6 +20,14 @@ PKGS=$(./xbps-src $test sort-dependencies $(cat /tmp/templates) 2>/dev/null || c
 for pkg in ${PKGS}; do
 	echo "Compilando paquete: $pkg ($arch $test)..."
 	./xbps-src -j$(nproc) -s $arch $test pkg "$pkg"
+	ret=$?
+	if [ $ret -eq 2 ]; then
+		echo "=> Omitiendo $pkg: no compatible con arquitectura $2 (código 2)"
+		continue
+	elif [ $ret -ne 0 ]; then
+		echo "ERROR: Falló la compilación de $pkg con código $ret"
+		exit 1
+	fi
 done
 
 exit 0
