@@ -1,0 +1,192 @@
+name: Check build
+
+on:
+  pull_request:
+    paths-ignore:
+      - '.github/**'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+      - '.VURINFO'
+  push:
+    branches:
+      - 'ci-**'
+      - 'update-**'
+      - 'main'
+    paths-ignore:
+      - '.github/**'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+      - '.VURINFO'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Lint changed templates.
+  xlint:
+    name: Lint templates
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/void-linux/void-glibc-full
+      env:
+        LICENSE_LIST: /void-packages/common/travis/license.lst
+
+    steps:
+      - name: Prepare container
+        run: |
+          xbps-install -Sy bash
+          mkdir -p /etc/xbps.d && cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/ 2>/dev/null || true
+          sed -i 's|repo-default|repo-ci|g' /etc/xbps.d/*-repository-*.conf
+          xbps-install -Syu xbps && xbps-install -yu && xbps-install -y sudo grep curl git python3
+          useradd -G xbuilder -M builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builder
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup void-packages masterdir
+        run: |
+          git clone --depth 1 https://github.com/void-linux/void-packages.git /void-packages
+          for d in "$GITHUB_WORKSPACE"/*; do
+            [ -d "$d" ] || continue
+            pkg=$(basename "$d")
+            [ "$pkg" = ".git" ] || [ "$pkg" = ".github" ] && continue
+            if [ -f "$d/template" ]; then
+              rm -rf "/void-packages/srcpkgs/$pkg"
+              cp -rf "$d" "/void-packages/srcpkgs/"
+            fi
+          done
+          for l in "$GITHUB_WORKSPACE"/*; do
+            [ -L "$l" ] || continue
+            cp -P "$l" "/void-packages/srcpkgs/"
+          done
+          mkdir -p /void-packages/common/travis
+          cp "$GITHUB_WORKSPACE/.github/ci/license.lst" /void-packages/common/travis/license.lst
+          chown -R builder:builder /void-packages "$GITHUB_WORKSPACE"
+
+      - name: Prepare masterdir
+        run: |
+          cd /void-packages
+          sudo -Eu builder "$GITHUB_WORKSPACE/.github/ci/set_mirror.sh"
+          "$GITHUB_WORKSPACE/.github/ci/fetch-xtools.sh"
+
+      - name: Find changed templates
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          sudo -Eu builder env GITHUB_WORKSPACE="$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/.github/ci/changed_templates.sh"
+
+      - name: Run lints
+        run: |
+          cd /void-packages
+          sudo -Eu builder env GITHUB_WORKSPACE="$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/.github/ci/xlint.sh"
+
+  # Build changed packages.
+  build:
+    name: Build packages
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.pull_request.title, '[ci skip]') && !contains(github.event.pull_request.body, '[ci skip]')"
+
+    container:
+      image: ghcr.io/void-linux/void-${{ matrix.config.libc }}-full
+      options: --platform ${{ matrix.config.platform }} --privileged
+      volumes:
+        - /dev:/dev
+      env:
+        ARCH: '${{ matrix.config.arch }}'
+        BOOTSTRAP: '${{ matrix.config.host }}'
+        TEST: '${{ matrix.config.test }}'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { arch: x86_64,       host: x86_64,      libc: glibc, platform: linux/amd64, test: 1 }
+          - { arch: i686,         host: i686,        libc: glibc, platform: linux/386,   test: 1 }
+          - { arch: x86_64-musl,  host: x86_64-musl, libc: musl,  platform: linux/amd64, test: 1 }
+
+    steps:
+      - name: Prepare container
+        run: |
+          xbps-install -Sy bash
+          mkdir -p /etc/xbps.d && cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/ 2>/dev/null || true
+          sed -i 's|repo-default|repo-ci|g' /etc/xbps.d/*-repository-*.conf
+          xbps-install -Syu xbps && xbps-install -yu && xbps-install -y sudo curl git python3
+          useradd -G xbuilder -M builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builder
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup void-packages masterdir
+        run: |
+          git clone --depth 1 https://github.com/void-linux/void-packages.git /void-packages
+          for d in "$GITHUB_WORKSPACE"/*; do
+            [ -d "$d" ] || continue
+            pkg=$(basename "$d")
+            [ "$pkg" = ".git" ] || [ "$pkg" = ".github" ] && continue
+            if [ -f "$d/template" ]; then
+              rm -rf "/void-packages/srcpkgs/$pkg"
+              cp -rf "$d" "/void-packages/srcpkgs/"
+            fi
+          done
+          for l in "$GITHUB_WORKSPACE"/*; do
+            [ -L "$l" ] || continue
+            cp -P "$l" "/void-packages/srcpkgs/"
+          done
+          cat << 'EOF' >> /void-packages/common/shlibs
+          libscenefx-0.5.so scenefx-latest-0.5_1
+          libQt6Pas.so.6 libqt6pas-bin-6.2.10_1
+          libcrypto.so.1.1 libssl1.1-1.1.1w_1
+          EOF
+          chown -R builder:builder /void-packages "$GITHUB_WORKSPACE"
+
+      - name: Prepare masterdir
+        run: |
+          cd /void-packages
+          sudo -Eu builder "$GITHUB_WORKSPACE/.github/ci/set_mirror.sh"
+          sudo -Eu builder "$GITHUB_WORKSPACE/.github/ci/prepare.sh"
+          sudo -Eu builder "$GITHUB_WORKSPACE/.github/ci/add-repo.sh" "$ARCH"
+          "$GITHUB_WORKSPACE/.github/ci/fetch-xtools.sh"
+
+      - name: Find changed templates
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          sudo -Eu builder env GITHUB_WORKSPACE="$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/.github/ci/changed_templates.sh"
+
+      - name: Build and check packages
+        run: |
+          cd /void-packages
+          sudo -Eu builder env GITHUB_WORKSPACE="$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/.github/ci/build.sh" "$BOOTSTRAP" "$ARCH" "$TEST"
+
+      - name: Show files
+        run: |
+          cd /void-packages
+          sudo -Eu builder env GITHUB_WORKSPACE="$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/.github/ci/show_files.sh" "$BOOTSTRAP" "$ARCH"
+
+      - name: Compare to previous
+        run: |
+          cd /void-packages
+          sudo -Eu builder env GITHUB_WORKSPACE="$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/.github/ci/xpkgdiff.sh" "$BOOTSTRAP" "$ARCH"
+
+      - name: Check file conflicts
+        if: matrix.config.arch == 'x86_64'
+        run: |
+          if [ -s /tmp/templates ]; then
+              cd /void-packages
+              export XDG_CACHE_HOME="$PWD/.cache"
+              sudo -Eu builder xlocate -S &&
+              sudo -Eu builder bash "$GITHUB_WORKSPACE/.github/ci/lint-conflicts"
+          fi
+
+      - name: Verify repository state
+        run: |
+          cd /void-packages
+          mkdir -p /check-install
+          chown builder:builder /check-install
+          sudo -Eu builder env GITHUB_WORKSPACE="$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/.github/ci/check-install.sh" "$BOOTSTRAP" "$ARCH"

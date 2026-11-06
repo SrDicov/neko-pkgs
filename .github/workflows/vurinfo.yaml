@@ -1,0 +1,41 @@
+name: VURINFO index
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '.github/**'
+      - '.VURINFO'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vurinfo
+  cancel-in-progress: false
+
+jobs:
+  vurinfo:
+    name: Generate root .VURINFO
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Commit and push if changed
+        run: |
+          git fetch origin main 2>/dev/null || true
+          git checkout -B main origin/main 2>/dev/null || true
+          python3 .github/scripts/gen-vurinfo.py .VURINFO .
+          git add .VURINFO
+          if git diff --cached --quiet; then
+            echo "sin cambios en .VURINFO"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "vur: regenerate root .VURINFO"
+          git push

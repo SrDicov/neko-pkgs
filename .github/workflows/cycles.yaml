@@ -1,0 +1,51 @@
+name: 'Cycle Check'
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * *'
+
+jobs:
+  cycles:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    container:
+      image: ghcr.io/void-linux/void-glibc-full
+    steps:
+      - name: Prepare container
+        run: |
+          xbps-install -Sy bash
+          mkdir -p /etc/xbps.d && cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/ 2>/dev/null || true
+          sed -i 's|repo-default|repo-ci|g' /etc/xbps.d/*-repository-*.conf
+          xbps-install -Syu xbps && xbps-install -yu && xbps-install -y sudo grep git python3-networkx github-cli
+          useradd -G xbuilder -M builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builder
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup void-packages
+        run: |
+          git clone --depth 1 https://github.com/void-linux/void-packages.git /void-packages
+          for d in "$GITHUB_WORKSPACE"/*; do
+            [ -d "$d" ] || continue
+            pkg=$(basename "$d")
+            [ "$pkg" = ".git" ] || [ "$pkg" = ".github" ] && continue
+            if [ -f "$d/template" ]; then
+              rm -rf "/void-packages/srcpkgs/$pkg"
+              cp -rf "$d" "/void-packages/srcpkgs/"
+            fi
+          done
+          for l in "$GITHUB_WORKSPACE"/*; do
+            [ -L "$l" ] || continue
+            cp -P "$l" "/void-packages/srcpkgs/"
+          done
+          chown -R builder:builder /void-packages "$GITHUB_WORKSPACE"
+
+      - name: Find cycles
+        run: |
+          cd /void-packages
+          sudo -Eu builder python3 "$GITHUB_WORKSPACE/.github/ci/xbps-cycles.py" | tee cycles
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

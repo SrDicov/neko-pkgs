@@ -1,0 +1,49 @@
+name: Detect upstream updates
+
+on:
+  schedule:
+    - cron: '23 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: detect-updates
+  cancel-in-progress: true
+
+jobs:
+  detect:
+    name: Detect
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/void-linux/void-glibc-full
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare container
+        run: |
+          xbps-install -Sy bash
+          mkdir -p /etc/xbps.d
+          cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/ 2>/dev/null || true
+          sed -i 's|repo-default|repo-ci|g' /etc/xbps.d/*-repository-*.conf
+          xbps-install -Syu xbps
+          xbps-install -yu
+          xbps-install -y python3 git
+
+      - name: Detect
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 .github/scripts/detect-updates.py \
+            --json updates.json --md updates.md
+
+      - name: Summary
+        run: cat updates.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: updates
+          path: updates.json
+          retention-days: 7
