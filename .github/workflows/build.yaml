@@ -44,9 +44,7 @@ jobs:
           echo "builder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builder
 
       - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        uses: classabbyamp/treeless-checkout-action@v1
 
       - name: Setup void-packages masterdir
         run: |
@@ -119,9 +117,7 @@ jobs:
           echo "builder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builder
 
       - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        uses: classabbyamp/treeless-checkout-action@v1
 
       - name: Setup void-packages masterdir
         run: |
@@ -150,8 +146,8 @@ jobs:
         run: |
           cd /void-packages
           sudo -Eu builder "$GITHUB_WORKSPACE/.github/ci/set_mirror.sh"
-          sudo -Eu builder "$GITHUB_WORKSPACE/.github/ci/prepare.sh"
           sudo -Eu builder "$GITHUB_WORKSPACE/.github/ci/add-repo.sh" "$ARCH"
+          sudo -Eu builder "$GITHUB_WORKSPACE/.github/ci/prepare.sh"
           "$GITHUB_WORKSPACE/.github/ci/fetch-xtools.sh"
 
       - name: Find changed templates

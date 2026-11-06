@@ -107,8 +107,8 @@ jobs:
           chown -R builder:builder /void-packages "$GITHUB_WORKSPACE"
           cd /void-packages
           sudo -Eu builder "$GITHUB_WORKSPACE/.github/ci/set_mirror.sh"
-          sudo -Eu builder "$GITHUB_WORKSPACE/.github/ci/prepare.sh"
           sudo -Eu builder "$GITHUB_WORKSPACE/.github/ci/add-repo.sh" x86_64
+          sudo -Eu builder "$GITHUB_WORKSPACE/.github/ci/prepare.sh"
           "$GITHUB_WORKSPACE/.github/ci/fetch-xtools.sh"
 
       - name: Apply version
@@ -202,6 +202,10 @@ jobs:
                           print(f"number={pr['number']}")
                           print(f"url={pr['html_url']}")
                           break
+              elif "not permitted to create or approve pull requests" in json.dumps(d):
+                  print("::warning::GitHub Actions no tiene permiso para abrir PRs con GITHUB_TOKEN. Rama subida correctamente.")
+                  print("number=0")
+                  print(f"url=https://github.com/{os.environ['REPO']}/tree/update/{os.environ['PKG']}-{os.environ['VER']}")
               else:
                   raise SystemExit("la API no devolvio un PR: " + json.dumps(d)[:400])
           else:

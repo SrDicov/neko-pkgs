@@ -9,16 +9,30 @@ set -e
 
 target="${1:?falta el target (x86_64, x86_64-musl, i686...)}"
 
-mkdir -p etc/xbps.d/custom etc/repo-keys
+install_key() {
+	key_path="$1"
+	name="$2"
+	for dir in etc/repo-keys common/repo-keys /var/db/xbps/keys masterdir/var/db/xbps/keys; do
+		if [ -d "$dir" ] || [ "$dir" != "masterdir/var/db/xbps/keys" ]; then
+			mkdir -p "$dir"
+			cp -f "$key_path" "$dir/$name" 2>/dev/null || true
+		fi
+	done
+}
+
+mkdir -p etc/xbps.d/custom etc/repo-keys common/repo-keys /var/db/xbps/keys
 
 # 1. Repositorio Neko (repo-neko)
 neko_url="https://github.com/Neko-Void-Linux/repo-neko/releases/download/stable"
 printf 'repository=%s\n' "$neko_url" > etc/xbps.d/custom/10-neko.conf
 
 neko_key="3a.23.f2.2d.5e.d1.ab.f5.3f.01.6f.a6.50.9f.15.64.plist"
-neko_fp="3a:23:f2:2d:5e:d1:ab:f5:3f:01:6f:a6:50:9f:15:64"
-curl -fsSL -o "etc/repo-keys/${neko_fp}.plist" "$neko_url/$neko_key" 2>/dev/null || true
-echo "repo-neko: $neko_url configurado (clave $neko_fp)"
+neko_fp="3a:23:f2:2d:5e:d1:ab:f5:3f:01:6f:a6:50:9f:15:64.plist"
+tmp_key="/tmp/neko_key.plist"
+if curl -fsSL -o "$tmp_key" "$neko_url/$neko_key" 2>/dev/null; then
+	install_key "$tmp_key" "$neko_fp"
+	echo "repo-neko: $neko_url configurado con clave $neko_fp"
+fi
 
 # 2. Repositorio z-repo (fallback / complementario)
 case "$target" in
@@ -38,9 +52,11 @@ if [ -n "$zrepo" ]; then
 		sleep 2
 	done
 	if [ -n "$zkey" ]; then
-		zfp=$(printf '%s' "${zkey%.plist}" | tr '.' ':')
-		curl -fsSL -o "etc/repo-keys/$zfp.plist" \
-			"https://github.com/SrDicov/z-repo/releases/download/stable/$zkey" 2>/dev/null || true
-		echo "zrepo: $zrepo (clave $zfp)"
+		zfp=$(printf '%s' "${zkey%.plist}" | tr '.' ':').plist
+		tmp_zkey="/tmp/z_key.plist"
+		if curl -fsSL -o "$tmp_zkey" "https://github.com/SrDicov/z-repo/releases/download/stable/$zkey" 2>/dev/null; then
+			install_key "$tmp_zkey" "$zfp"
+			echo "zrepo: $zrepo configurado con clave $zfp"
+		fi
 	fi
 fi
