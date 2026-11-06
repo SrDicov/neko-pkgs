@@ -1,19 +1,20 @@
 # Template file for 'vscode-bin'
 pkgname=vscode-bin
-version=1.145.0
+version=1.145.1
 revision=1
 archs="x86_64"
 create_wrksrc=yes
 hostmakedepends="tar"
-depends="libXtst nss nspr alsa-lib gtk+3 libsecret libnotify libXScrnSaver xdg-utils desktop-file-utils"
+depends="libXtst nss nspr alsa-lib gtk+3 libsecret libnotify libXScrnSaver
+ xdg-utils desktop-file-utils"
 short_desc="Visual Studio Code (official Microsoft binary release)"
 maintainer="ANOMALI0x00 <SrDicov@gmail.com>"
 license="custom:Unfree"
 homepage="https://code.visualstudio.com"
 _commit=a717861c07586a53d83b80d742cd3f59b20a6273
 _timestamp=1793749246
-distfiles="https://vscode.download.prss.microsoft.com/dbazure/download/stable/${_commit}/code-stable-x64-${_timestamp}.tar.gz"
-checksum=d44510383961b089f7b7ce848ebcd38a740f8591bb8b60f8153a210e45d8848c
+distfiles="https://vscode.download.prss.microsoft.com/dbazure/download/stable/6bab64e2d12b04d04c0d99c27ff166023efd1dda/code-stable-x64-1793902986.tar.gz"
+checksum=f8407593a78a9d3a4fe47dbdae59abb21e62369438fbe6792bda4be5afaa83ec
 nostrip=yes
 nopie=yes
 noshlibprovides=yes
