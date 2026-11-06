@@ -203,7 +203,8 @@ jobs:
                           print(f"url={pr['html_url']}")
                           break
               elif "not permitted to create or approve pull requests" in json.dumps(d):
-                  print("::warning::GitHub Actions no tiene permiso para abrir PRs con GITHUB_TOKEN. Rama subida correctamente.")
+                  import sys
+                  print("::warning::GitHub Actions no tiene permiso para abrir PRs con GITHUB_TOKEN. Rama subida correctamente.", file=sys.stderr)
                   print("number=0")
                   print(f"url=https://github.com/{os.environ['REPO']}/tree/update/{os.environ['PKG']}-{os.environ['VER']}")
               else:
