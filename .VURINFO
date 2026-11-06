@@ -1416,7 +1416,7 @@
     "hostmakedepends": [
       "zig-nk"
     ],
-    "maintainer": "Javierc",
+    "maintainer": "JavierC <javiercyt@atomicmail.io>",
     "makedepends": [],
     "pkgname": "kyoz",
     "provides": [],
@@ -3727,7 +3727,7 @@
       "tar",
       "xz"
     ],
-    "maintainer": "JavierC",
+    "maintainer": "JavierC <javiercyt@atomicmail.io>",
     "makedepends": [],
     "pkgname": "tracktion-download-manager",
     "provides": [],
@@ -4076,7 +4076,7 @@
       "binutils",
       "tar"
     ],
-    "maintainer": "JavierC",
+    "maintainer": "JavierC <javiercyt@atomicmail.io>",
     "makedepends": [],
     "pkgname": "waveform-free",
     "provides": [],
