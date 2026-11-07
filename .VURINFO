@@ -576,7 +576,7 @@
     "build_style": "gnu-makefile",
     "checkdepends": [],
     "checksum": [
-      "sha256:bce225beded823ce47323fc3d7adf3f76b1bf2b942d55481f785648dc2e7ae46"
+      "sha256:8b8ba72dabc3f17ce547e1680cf130fd6e1b806e8ea2dc2a9d2fb9ff8b6e6f26"
     ],
     "depends": [
       "fuse-overlayfs",
@@ -600,7 +600,7 @@
     "restricted": false,
     "revision": 1,
     "subpackages": [],
-    "version": "2.14.16"
+    "version": "2.14.18"
   },
   {
     "archs": [
@@ -3352,7 +3352,7 @@
     "build_style": "fetch",
     "checkdepends": [],
     "checksum": [
-      "sha256:75f9aa987e25dda59cc9700bae5669caf7665324fc0710115a41ecc55fcd0a52"
+      "sha256:8f9bcd34c3a919cb4f2381af7a7f28e3f467fab7981e127338b7842bb9edf192"
     ],
     "depends": [
       "gtk4",
@@ -3371,7 +3371,7 @@
       "dbus"
     ],
     "distfiles": [
-      "https://github.com/ViceVerse-cz/Serein/releases/download/v1.0.0-nightly.20261106.77/serein-v1.0.0-nightly.20261106.77-Linux-X64.AppImage"
+      "https://github.com/ViceVerse-cz/Serein/releases/download/v1.0.0-nightly.20261107.81/serein-v1.0.0-nightly.20261107.81-Linux-X64.AppImage"
     ],
     "format_version": 1,
     "hostmakedepends": [
@@ -3389,7 +3389,7 @@
     "restricted": false,
     "revision": 1,
     "subpackages": [],
-    "version": "1.0.0pre20261106.77"
+    "version": "1.0.0pre20261107.81"
   },
   {
     "archs": [
