@@ -3255,7 +3255,7 @@
     "build_style": null,
     "checkdepends": [],
     "checksum": [
-      "sha256:8d6c2f1c6ffc249c61d5c2f8cb4f15b95c7dc4d7d52dbfe0dfefa66034dbf8ed"
+      "sha256:0add59735e9cacd000705821e0751d20aae4ad07adf9454224985e8179b036f4"
     ],
     "depends": [
       "nodejs"
@@ -3275,7 +3275,7 @@
     "restricted": false,
     "revision": 1,
     "subpackages": [],
-    "version": "1.18.1"
+    "version": "1.19.0"
   },
   {
     "archs": [
@@ -3789,7 +3789,7 @@
     "build_style": null,
     "checkdepends": [],
     "checksum": [
-      "sha256:fbf711fb7f3caff1015c507c1eb5f71d1c79606522942f21e716314655321d43"
+      "sha256:f16b3441c6a5062245eef490415102b65d2034c491658f0b54b96cbba081f768"
     ],
     "depends": [
       "gtk+3",
@@ -3834,7 +3834,7 @@
     "restricted": false,
     "revision": 1,
     "subpackages": [],
-    "version": "3.22.5"
+    "version": "3.22.6"
   },
   {
     "archs": [
@@ -4063,9 +4063,9 @@
     "provides": [],
     "replaces": [],
     "restricted": false,
-    "revision": 2,
+    "revision": 1,
     "subpackages": [],
-    "version": "6.7.7"
+    "version": "6.7.8"
   },
   {
     "archs": [
