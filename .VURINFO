@@ -107,7 +107,7 @@
     "build_style": null,
     "checkdepends": [],
     "checksum": [
-      "sha256:ef67dfea1a0a8f2d98ce1925fae3132d47b05c1a7e8d4b0a1f761d06085a7bdf"
+      "sha256:30ccdea1fff0bf643b7f6e7aa493240d13ec1d866acf4f89c2a6cc3a2c33369c"
     ],
     "depends": [
       "gtk+3",
@@ -131,7 +131,7 @@
       "nspr"
     ],
     "distfiles": [
-      "https://storage.googleapis.com/antigravity-public/antigravity-hub/2.30.0-6386428939206656/linux-x64/Antigravity.tar.gz"
+      "https://storage.googleapis.com/antigravity-public/antigravity-hub/2.31.0-6379060755038208/linux-x64/Antigravity.tar.gz"
     ],
     "format_version": 1,
     "hostmakedepends": [
@@ -150,7 +150,7 @@
     "restricted": false,
     "revision": 1,
     "subpackages": [],
-    "version": "2.30.0"
+    "version": "2.31.0"
   },
   {
     "archs": [
@@ -349,7 +349,7 @@
     "build_style": null,
     "checkdepends": [],
     "checksum": [
-      "sha256:9d0e39e4020bfdf7aafc51308017d440ec009f8f3bbd91b67876b0d65a55505d"
+      "sha256:9c23fa625c124222c6c59d6d6f9819831838a715a7b8109c7f7ef8d85ec636a3"
     ],
     "depends": [
       "alsa-lib",
@@ -385,7 +385,7 @@
     "restricted": false,
     "revision": 1,
     "subpackages": [],
-    "version": "1.99.55"
+    "version": "1.99.56"
   },
   {
     "archs": [
@@ -1997,7 +1997,7 @@
     "build_style": null,
     "checkdepends": [],
     "checksum": [
-      "sha256:7a13c1da7737b190bbf17f4b686cd58fe48f7fd17a42a942294c0604a8481377"
+      "sha256:bc9ad8436265574074eca6023c1fafa3ef2c394c36dad7e15ca7faa06ab24c39"
     ],
     "depends": [
       "gtk+3",
@@ -2028,7 +2028,7 @@
     "restricted": false,
     "revision": 1,
     "subpackages": [],
-    "version": "16.0"
+    "version": "16.0.1"
   },
   {
     "archs": [
