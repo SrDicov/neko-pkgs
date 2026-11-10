@@ -107,7 +107,7 @@
     "build_style": null,
     "checkdepends": [],
     "checksum": [
-      "sha256:3a675704b9b3a3070e06c0d50d3533043af54521cd15c65494e9cdc2bf189664"
+      "sha256:ef67dfea1a0a8f2d98ce1925fae3132d47b05c1a7e8d4b0a1f761d06085a7bdf"
     ],
     "depends": [
       "gtk+3",
@@ -131,7 +131,7 @@
       "nspr"
     ],
     "distfiles": [
-      "${_site}/${version}-${_buildid}/linux-x64/Antigravity.tar.gz"
+      "https://storage.googleapis.com/antigravity-public/antigravity-hub/2.30.0-6386428939206656/linux-x64/Antigravity.tar.gz"
     ],
     "format_version": 1,
     "hostmakedepends": [
@@ -150,7 +150,7 @@
     "restricted": false,
     "revision": 1,
     "subpackages": [],
-    "version": "2.29.0"
+    "version": "2.30.0"
   },
   {
     "archs": [
@@ -3352,7 +3352,7 @@
     "build_style": "fetch",
     "checkdepends": [],
     "checksum": [
-      "sha256:8f9bcd34c3a919cb4f2381af7a7f28e3f467fab7981e127338b7842bb9edf192"
+      "sha256:41cbdc7abaaa7ac8911044da67e9e9cfe3be13959d6af84fd22721035724e98e"
     ],
     "depends": [
       "gtk4",
@@ -3371,7 +3371,7 @@
       "dbus"
     ],
     "distfiles": [
-      "https://github.com/ViceVerse-cz/Serein/releases/download/v1.0.0-nightly.20261107.81/serein-v1.0.0-nightly.20261107.81-Linux-X64.AppImage"
+      "https://github.com/ViceVerse-cz/Serein/releases/download/v1.0.0-nightly.20261108.82/serein-v1.0.0-nightly.20261108.82-Linux-X64.AppImage"
     ],
     "format_version": 1,
     "hostmakedepends": [
@@ -3389,7 +3389,7 @@
     "restricted": false,
     "revision": 1,
     "subpackages": [],
-    "version": "1.0.0pre20261107.81"
+    "version": "1.0.0pre20261108.82"
   },
   {
     "archs": [
