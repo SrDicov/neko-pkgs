@@ -2525,7 +2525,7 @@
     ],
     "replaces": [],
     "restricted": false,
-    "revision": 1,
+    "revision": 2,
     "subpackages": [],
     "version": "2.5.0"
   },
