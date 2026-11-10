@@ -75,7 +75,7 @@
     "build_style": "meson",
     "checkdepends": [],
     "checksum": [
-      "sha256:f48826c661634919527c8a855ea5f85d4ce383df545899c5ffda7031b9719b7c"
+      "sha256:3436e06be0dff7cc61b724ce57e91e777f00507772698374c0e73354264efa59"
     ],
     "depends": [],
     "distfiles": [
@@ -96,7 +96,7 @@
     "provides": [],
     "replaces": [],
     "restricted": false,
-    "revision": 2,
+    "revision": 3,
     "subpackages": [],
     "version": "9.0.23"
   },
@@ -1574,7 +1574,7 @@
     "build_style": "meson",
     "checkdepends": [],
     "checksum": [
-      "sha256:ae8ccad482461f1cc98fbb31dc04a62eb580472ed6e53627cedc928e60096361"
+      "sha256:6cba2e4afa1f8199e18f5cd681ad831fdbad7c5a20109ee75ea213540404920a"
     ],
     "depends": [
       "libva",
@@ -1602,7 +1602,7 @@
       "libva-intel-driver>=0"
     ],
     "restricted": false,
-    "revision": 1,
+    "revision": 2,
     "subpackages": [],
     "version": "2.4.6.1"
   },
@@ -2035,20 +2035,22 @@
     ],
     "build_style": null,
     "checkdepends": [],
-    "checksum": [],
+    "checksum": [
+      "sha256:3dbc16e9270732e2921f6f72e46afd4a2086f5603176fa22e926d4a4f115c624"
+    ],
     "depends": [],
-    "distfiles": [],
+    "distfiles": [
+      "https://github.com/Neko-Void-Linux/neko-backgrounds/archive/${_commit}.tar.gz>${pkgname}-${_commit}.tar.gz"
+    ],
     "format_version": 1,
     "hostmakedepends": [],
     "maintainer": "JavierC",
-    "makedepends": [
-      "git"
-    ],
+    "makedepends": [],
     "pkgname": "neko-backgrounds",
     "provides": [],
     "replaces": [],
     "restricted": false,
-    "revision": 7,
+    "revision": 8,
     "subpackages": [],
     "version": "7.2"
   },
@@ -2154,20 +2156,26 @@
     ],
     "build_style": null,
     "checkdepends": [],
-    "checksum": [],
+    "checksum": [
+      "sha256:40c7775094a9c4f1acc0a8419832007cd9af7e9def7dad69692e587f6810dff5",
+      "sha256:e4b47e76d96f6a3592f41961a7540bd8d7416230434a9c7c845ea995e1591210",
+      "sha256:b374567fb70db9cb524d0251bdd3ac737fe91546ce38c111eccd6b2850407e19"
+    ],
     "depends": [],
-    "distfiles": [],
+    "distfiles": [
+      "https://github.com/Neko-Void-Linux/neko-icons/archive/${_commit}.tar.gz>neko-icons-${_commit}.tar.gz",
+      "https://github.com/ItsZariep/pixelitos-icon-theme/archive/${_pixelitos_commit}.tar.gz>pixelitos-${_pixelitos_commit}.tar.gz",
+      "https://github.com/tsora1603/pixora-icons/archive/${_pixora_commit}.tar.gz>pixora-${_pixora_commit}.tar.gz"
+    ],
     "format_version": 1,
     "hostmakedepends": [],
     "maintainer": "JavierC",
-    "makedepends": [
-      "git"
-    ],
+    "makedepends": [],
     "pkgname": "neko-icons",
     "provides": [],
     "replaces": [],
     "restricted": false,
-    "revision": 6,
+    "revision": 7,
     "subpackages": [],
     "version": "7.8"
   },
@@ -2177,20 +2185,24 @@
     ],
     "build_style": null,
     "checkdepends": [],
-    "checksum": [],
+    "checksum": [
+      "sha256:60b65d39ca70b8af5a81af630f6fdba546a34f8dd8bbc02ef6d17b6a1059f0d6",
+      "sha256:bedf8cad3bfa2af2baaecc42d6ab817c60f701e9f6ef0128e083d3ec8bedda72"
+    ],
     "depends": [],
-    "distfiles": [],
+    "distfiles": [
+      "https://github.com/Neko-Void-Linux/neko-themes/archive/${_commit}.tar.gz>neko-themes-${_commit}.tar.gz",
+      "https://github.com/Neko-Void-Linux/Dracula/archive/${_dracula_commit}.tar.gz>Dracula-${_dracula_commit}.tar.gz"
+    ],
     "format_version": 1,
     "hostmakedepends": [],
     "maintainer": "JavierC",
-    "makedepends": [
-      "git"
-    ],
+    "makedepends": [],
     "pkgname": "neko-themes",
     "provides": [],
     "replaces": [],
     "restricted": false,
-    "revision": 3,
+    "revision": 4,
     "subpackages": [],
     "version": "7.8"
   },
