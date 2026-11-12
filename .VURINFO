@@ -44,7 +44,10 @@
     "checksum": [
       "sha256:e5395c0478227565b85c7a83f24aee5e4b208a2b33c458d15e24ff69097ddc30"
     ],
-    "depends": [],
+    "depends": [
+      "polkit",
+      "bash"
+    ],
     "distfiles": [
       "https://github.com/Neko-Void-Linux/Neko-Kernel-Manager/archive/refs/tags/${version}.tar.gz"
     ],
@@ -57,8 +60,7 @@
     "maintainer": "ANOMALI0x00 <SrDicov@gmail.com>",
     "makedepends": [
       "qt6-base-devel",
-      "qt6-declarative-devel",
-      "fmt-devel"
+      "qt6-declarative-devel"
     ],
     "pkgname": "Neko-Kernel-Manager",
     "provides": [],
