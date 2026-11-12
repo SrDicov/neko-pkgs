@@ -1,0 +1,97 @@
+name: "Build Verification & Event-Driven Auto-Merge"
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "**/template"
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.changed.outputs.packages }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - id: changed
+        run: |
+          PKGS=$(git diff --name-only HEAD~1 HEAD | grep '/template$' | cut -d/ -f1 | sort -u | tr '\n' ' ')
+          echo "packages=$PKGS" >> "$GITHUB_OUTPUT"
+          echo "Changed packages: $PKGS"
+
+  build-matrix:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.packages != ''
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            image: ghcr.io/void-linux/void-glibc-full:latest
+          - arch: x86_64-musl
+            image: ghcr.io/void-linux/void-musl-full:latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Seed Dependencies (Surgical - avoids 30GB disk overflow)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for pkg in ${{ needs.detect-changes.outputs.packages }}; do
+            python3 .github/scripts/autopkg/cli.py seed \
+              --repo "." \
+              --from-github "SrDicov/repo-neko" \
+              --arch "${{ matrix.arch }}" \
+              "$pkg" || true
+          done
+
+      - name: Build Packages in Isolated Container
+        run: |
+          for pkg in ${{ needs.detect-changes.outputs.packages }}; do
+            docker run --rm --privileged \
+              -v /dev:/dev \
+              -v "$PWD:/void-packages" \
+              -w /void-packages \
+              "${{ matrix.image }}" \
+              bash -c '
+                set -e
+                mkdir -p etc
+                echo "XBPS_ALLOW_RESTRICTED=yes" >> etc/conf
+                echo "XBPS_CHROOT_CMD=uchroot" >> etc/conf
+                echo "XBPS_MAKEJOBS=$(nproc)" >> etc/conf
+                mkdir -p /etc/xbps.d && cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/ 2>/dev/null || true
+                sed -i "s|repo-default|repo-ci|g" /etc/xbps.d/*-repository-*.conf 2>/dev/null || true
+                xbps-install -Syu -y bash python3 sudo git curl >/dev/null 2>&1 || true
+                useradd -m -d /tmp/builder -G xbuilder -s /bin/bash builder 2>/dev/null || true
+                echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+                su - builder -c "python3 /void-packages/.github/scripts/autopkg/cli.py build --repo /void-packages --arch ${{ matrix.arch }} '"$pkg"'"
+              '
+          done
+
+  auto-merge:
+    needs: [detect-changes, build-matrix]
+    if: success() && contains(github.event.pull_request.labels.*.name, 'autopkg-update')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge Green PR (Zero Sleep Loop)
+        env:
+          GH_TOKEN: ${{ secrets.PR_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge "${{ github.event.pull_request.number }}" -R "${{ github.repository }}" --squash --delete-branch
