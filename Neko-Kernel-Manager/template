@@ -5,7 +5,8 @@ revision=1
 build_style=meson
 configure_args="-Db_lto=false"
 hostmakedepends="pkg-config qt6-base qt6-declarative"
-makedepends="qt6-base-devel qt6-declarative-devel fmt-devel"
+makedepends="qt6-base-devel qt6-declarative-devel"
+depends="polkit bash"
 short_desc="Comprehensive kernel manager for Void Linux"
 maintainer="ANOMALI0x00 <SrDicov@gmail.com>"
 license="GPL-3.0-only"
