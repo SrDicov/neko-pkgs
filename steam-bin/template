@@ -30,8 +30,7 @@ do_install() {
 	vmkdir usr/lib/steam
 	vcopy usr/lib/steam/* usr/lib/steam
 
-	vmkdir usr/bin
-	vcopy "${FILESDIR}/steam" usr/bin
+	vbin "${FILESDIR}/steam-wrapper" steam
 
 	vmkdir usr/share
 	for dir in applications doc icons man metainfo pixmaps; do
