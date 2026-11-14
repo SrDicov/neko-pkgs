@@ -1,3 +1,4 @@
+# Template file for 'hydra-launcher'
 pkgname=hydra-launcher
 version=4.4.1
 revision=1
@@ -6,14 +7,16 @@ create_wrksrc=yes
 hostmakedepends="bsdtar"
 depends="gtk+3 nss alsa-lib nspr at-spi2-core libsecret libnotify libXtst
  libXScrnSaver eudev-libudev libcups libXrandr libXcomposite libXdamage
- libxkbcommon libgbm mesa-dri xrandr hicolor-icon-theme p7zip
- python3 libtorrent-rasterbar-python3 xdg-utils"
+ libxkbcommon libgbm mesa-dri xrandr hicolor-icon-theme p7zip python3
+ libtorrent-rasterbar-python3 xdg-utils"
 short_desc="Game launcher with built-in bittorrent client"
 maintainer="ANOMALI0x00 <SrDicov@gmail.com>"
 license="MIT"
 homepage="https://github.com/hydralauncher/hydra"
 distfiles="https://github.com/hydralauncher/hydra/releases/download/v${version}/hydralauncher_${version}_amd64.deb"
 checksum=0527fe3fec945b3463f14d7b61a6ff12f76215b9e5d3ba338a677d0c20c92cb8
+provides="hydra-launcher-bin-${version}_${revision}"
+replaces="hydra-launcher-bin>=0"
 nostrip=yes
 noshlibprovides=yes
 noverifyrdeps=yes
