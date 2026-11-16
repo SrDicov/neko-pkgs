@@ -62,7 +62,7 @@ jobs:
               continue
             fi
             if [ -n "$PKGS" ] && gh workflow run autobuild.yml -R "$repo" --ref main \
-              -f packages="$PKGS" 2>/dev/null; then
+              -f packages="$PKGS" -f repo_url="https://github.com/${{ github.repository }}.git" 2>/dev/null; then
               echo "disparado $repo con paquetes: $PKGS"
               continue
             fi
