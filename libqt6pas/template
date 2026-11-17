@@ -20,9 +20,3 @@ do_install() {
 	ln -sf libQt6Pas.so.6.2.10 ${DESTDIR}/usr/lib/libQt6Pas.so.6
 	ln -sf libQt6Pas.so.6 ${DESTDIR}/usr/lib/libQt6Pas.so
 }
-
-libqt6pas_package() {
-	metapackage=yes
-	depends="${sourcepkg}>=${version}_${revision}"
-	short_desc+=" (transitional dummy package)"
-}
