@@ -15,12 +15,11 @@ homepage="https://github.com/mangowm/mango"
 changelog="https://github.com/mangowm/mango/releases"
 distfiles="https://github.com/Neko-Void-Linux/mango/archive/${_commit}.tar.gz"
 checksum=1e7d2df3854838aeef35b914ab49ad24c600e3ddaac5cc977cebda89608f10ba
+create_wrksrc=yes
+build_wrksrc="mango-${_commit}"
 
 build_options="xwayland"
 desc_option_xwayland="Enable Xwayland support"
 
 replaces="mangowc-latest>=0 mangowc>=0"
 provides="mangowc-${version}_${revision} mangowc-latest-${version}_${revision}"
-post_extract() {
-	mv mango-${_commit}* ${pkgname}-${version}
-}
