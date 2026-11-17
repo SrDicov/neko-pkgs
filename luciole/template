@@ -1,8 +1,8 @@
 # Template file for 'luciole'
 pkgname=luciole
 version=0.1.0
-revision=2
-_commit=b40c96336d97a15a3874bc93cb7b61627aeb3563
+revision=3
+_commit=0941f3fa631f2af0cc288ed2545798e597bff515
 archs="x86_64*"
 build_style=meson
 configure_args="-Dtests=disabled -Dnative_optimizations=false -Dbenchmarks=false -Dwerror=false -Dbuild_revision=${_commit:0:7}"
@@ -17,7 +17,7 @@ maintainer="Dicov <SrDicov@gmail.com>"
 license="MIT"
 homepage="https://github.com/noctalia-dev/luciole"
 distfiles="https://github.com/noctalia-dev/luciole/archive/${_commit}.tar.gz>${pkgname}-${_commit}.tar.gz"
-checksum=66d4f5a2e655386e7997d509ebdbc18e71b1a03ee4d1d4268af74c5bbeeccbb2
+checksum=aec3a3c56d6865b83eef4b93996e50b8d795feaee193ce552f5a9e7740e94b28
 
 post_patch() {
 	vsed -i src/browser/directory_tree.cpp \
